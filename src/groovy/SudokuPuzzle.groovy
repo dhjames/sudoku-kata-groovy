@@ -3,7 +3,10 @@ class SudokuPuzzle {
   private Integer[][] tableData = new Integer[9][9]
 
   boolean isSolved() {
-    return false
+    for (row in tableData) {
+      if (row.any {it == null}) return false
+    }
+    return true
   }
 
   void setTableData(Integer[][] values) {
