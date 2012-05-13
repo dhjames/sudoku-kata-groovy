@@ -1,12 +1,22 @@
 class SudokuPuzzle {
 
-  private Integer[][] tableData = new Integer[9][9]
+  private Integer[][] tableData
+
+  SudokuPuzzle() {
+    initializeEmptyTable()
+  }
+
+  private void initializeEmptyTable() {
+    tableData = new Integer[9][9]
+  }
 
   boolean isSolved() {
-    for (row in tableData) {
-      if (row.any {it == null}) return false
-    }
+    if (!getRowSets().every {isValidSudokuSet(it)}) return false
     return true
+  }
+
+  private boolean isValidSudokuSet(row) {
+    row == 1..9 as Set
   }
 
   void setTableData(Integer[][] values) {
@@ -24,16 +34,24 @@ class SudokuPuzzle {
       throw new IllegalArgumentException()
   }
 
-  private void ensureValidColumn(Integer[][] data) {
-    for (row in data) {
+  private void ensureValidColumn(Integer[][] solution) {
+    for (row in solution) {
       if (row.length != 9)
         throw new IllegalArgumentException()
-      if (!row.every {col -> isValidValue(col)})
+      if (!row.every {isValidCell(it)})
         throw new IllegalArgumentException()
     }
   }
 
-  private boolean isValidValue(Integer cell) {
+  private boolean isValidCell(Integer cell) {
     return cell == null || (1..9).contains(cell)
+  }
+
+  private List getRowSets() {
+    def rowSets = []
+    for (Set row in tableData) {
+      rowSets << row
+    }
+    return rowSets
   }
 }

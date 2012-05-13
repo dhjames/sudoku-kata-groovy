@@ -3,16 +3,14 @@ import spock.lang.Specification
 class SudokuTests extends Specification {
 
   SudokuPuzzle sudoku = new SudokuPuzzle()
+  Integer[][] solution
 
   def "an empty sudoku puzzle should not be declared solved"() {
-    when:
-    sudoku.setTableData(new Integer[9][9])
-
-    then:
+    expect:
     !sudoku.isSolved()
   }
 
-  def "should throw exception if table data is not a 9x9 array"() {
+  def "should throw exception if solution data is not a 9x9 array"() {
     when:
     sudoku.setTableData(new Integer[rows][cols])
 
@@ -26,7 +24,7 @@ class SudokuTests extends Specification {
     9    | 10
   }
 
-  def "should throw exception when a cell value is not in the range 1..9 or null"() {
+  def "should throw exception when a cell value is not in the set {1..9} or null"() {
     given:
     def data = new Integer[9][9]
     data[row][col] = value
@@ -46,7 +44,7 @@ class SudokuTests extends Specification {
 
   def "given a correct puzzle solution, isSolved should return true"() {
     given:
-    Integer[][] validSolution = [
+    solution = [
         [5, 3, 4, 6, 7, 8, 9, 1, 2],
         [6, 7, 2, 1, 9, 5, 3, 4, 8],
         [1, 9, 8, 3, 4, 2, 5, 6, 7],
@@ -59,9 +57,51 @@ class SudokuTests extends Specification {
     ]
 
     when:
-    sudoku.setTableData(validSolution)
+    sudoku.setTableData(solution)
 
     then:
     sudoku.isSolved()
+  }
+
+  def "given a correct solution minus one missing value, isSolved should return false"() {
+    given:
+    solution = [
+        [5, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [1, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 4],
+        [2, 8, 7, 4, 1, 9, 6, 3, 5],
+        [3, 4, 5, 2, 8, 6, 1, 7, null]
+    ]
+
+    when:
+    sudoku.setTableData(solution)
+
+    then:
+    !sudoku.isSolved()
+  }
+
+  def "given a solution with duplicate numbers in two rows, isSolved should return false"() {
+    given:
+    solution = [
+        [1, 3, 4, 6, 7, 8, 9, 1, 2],
+        [6, 7, 2, 1, 9, 5, 3, 4, 8],
+        [5, 9, 8, 3, 4, 2, 5, 6, 7],
+        [8, 5, 9, 7, 6, 1, 4, 2, 3],
+        [4, 2, 6, 8, 5, 3, 7, 9, 1],
+        [7, 1, 3, 9, 2, 4, 8, 5, 6],
+        [9, 6, 1, 5, 3, 7, 2, 8, 4],
+        [2, 8, 7, 4, 1, 9, 6, 3, 5],
+        [3, 4, 5, 2, 8, 6, 1, 7, 9]
+    ]
+
+    when:
+    sudoku.setTableData(solution)
+
+    then:
+    !sudoku.isSolved()
   }
 }
