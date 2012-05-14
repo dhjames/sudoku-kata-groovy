@@ -11,9 +11,11 @@ class SudokuPuzzle {
   }
 
   boolean isSolved() {
-    getRowSets().every {isValidSudokuSet(it)} &&
-        getColSets().every {isValidSudokuSet(it)} &&
-        getBoxSets().every {isValidSudokuSet(it)}
+    hasValidRows() && hasValidColumns() && hasValidBoxes()
+  }
+
+  protected boolean hasValidRows() {
+    getRowSets().every {isValidSudokuSet(it)}
   }
 
   private List getRowSets() {
@@ -22,6 +24,10 @@ class SudokuPuzzle {
       rowSets << row
     }
     return rowSets
+  }
+
+  protected boolean hasValidColumns() {
+    getColSets().every {isValidSudokuSet(it)}
   }
 
   private List getColSets() {
@@ -34,6 +40,10 @@ class SudokuPuzzle {
       }
     }
     return cols
+  }
+
+  protected boolean hasValidBoxes() {
+    getBoxSets().every {isValidSudokuSet(it)}
   }
 
   private List getBoxSets() {
