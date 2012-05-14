@@ -11,9 +11,9 @@ class SudokuPuzzle {
   }
 
   boolean isSolved() {
-    if (!getRowSets().every {isValidSudokuSet(it)}) return false
-    if (!getColSets().every {isValidSudokuSet(it)}) return false
-    return true
+    getRowSets().every {isValidSudokuSet(it)} &&
+        getColSets().every {isValidSudokuSet(it)} &&
+        getBoxSets().every {isValidSudokuSet(it)}
   }
 
   private List getRowSets() {
@@ -34,6 +34,22 @@ class SudokuPuzzle {
       }
     }
     return cols
+  }
+
+  private List getBoxSets() {
+    def boxSets = []
+    for (i in 0..2) {
+      for (j in 0..2) {
+        Set<Integer> box = []
+        for (k in 0..2) {
+          def colIndex = j * 3
+          def boxRow = tableData[i * 3 + k][colIndex..(colIndex + 2)]
+          box.addAll(boxRow)
+        }
+        boxSets << box
+      }
+    }
+    return boxSets
   }
 
   private boolean isValidSudokuSet(Set<Integer> set) {
