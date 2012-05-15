@@ -1,0 +1,17 @@
+This project was done in order to practice TDD and other programming skills.
+It is implemented
+in Groovy and uses the Spock Framework for unit tests.
+
+The goal was to write a program that tests whether a Sudoku puzzle has been
+solved correctly. We want to write the simplest program that satisfies the
+following conditions:
+
+* A Sudoku table has 9 rows and 9 columns
+* Cells in the table are allowed to have a value between between 1 and 9
+* When a table is solved, each row, column, and 3 x 3 box also contain the values 1 - 9
+
+To compile and run the tests, type:
+
+ ./gradlew build
+
+Gradle will automatically download the required dependencies.
